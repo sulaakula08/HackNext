@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ventorme — план поступления за 8 вопросов</title>
+  <meta name="description" content="Короткий тест, профессии, вузы и план поступления. Бесплатная регистрация через Google.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#quiz">К тесту</a>
+
+  <div class="hero">
+    <div class="top">
+      <nav class="nav" aria-label="Главная навигация">
+        <a class="logo" href="#top">
+          <svg class="logo-mark" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#3b47ff" d="M12 2l2.4 6.8L21 12l-6.6 3.2L12 22l-2.4-6.8L3 12l6.6-3.2z"/>
+          </svg>
+          ventorme.ai
+        </a>
+        <div class="links" id="links">
+          <a href="#quiz">Тест</a>
+          <a href="#path">7 шагов</a>
+          <a href="#features">Возможности</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="nav-actions">
+          <span class="lang" aria-hidden="true">RU</span>
+          <a class="btn btn-ghost" data-register href="https://ventorme.ai/register?utm_source=hacknext&amp;utm_campaign=team-175">Вход</a>
+          <a class="btn btn-yellow" data-register href="https://ventorme.ai/register?utm_source=hacknext&amp;utm_campaign=team-175">Регистрация</a>
+          <button class="menu-btn" id="menu-btn" type="button" aria-label="Меню">☰</button>
+        </div>
+      </nav>
+    </div>
+
+    <div class="wrap hero-grid" id="top">
+      <div>
+        <span class="kicker">2 минуты · бесплатно · вход через Google</span>
+        <h1>План <span class="hl">твоего</span> поступления с первого экрана</h1>
+        <p class="lead">Ventorme помогает школьнику выбрать профессию, вуз и шаги до зачисления. Не длинная витрина — короткий тест и понятный следующий шаг.</p>
+        <div class="hero-cta">
+          <a class="btn btn-lime" href="#quiz">Начать тест</a>
+          <span class="tiny">8 вопросов. Результат откроется после регистрации.</span>
+        </div>
+      </div>
+
+      <aside class="quiz-card" id="quiz" aria-label="Мини-тест">
+        <div class="quiz-head">
+          <div>
+            <div class="chips">
+              <span class="chip">8 вопросов</span>
+              <span class="chip">Бесплатно</span>
+            </div>
+            <h2>Ответь и получи персональный план поступления</h2>
+          </div>
+        </div>
+
+        <svg class="mascot" viewBox="0 0 200 220" aria-hidden="true">
+          <ellipse cx="100" cy="205" rx="48" ry="8" fill="rgba(0,0,0,.12)"/>
+          <rect x="58" y="118" width="84" height="78" rx="28" fill="#3b82f6"/>
+          <circle cx="100" cy="92" r="52" fill="#f3f6fb"/>
+          <circle cx="62" cy="52" r="18" fill="#f3f6fb"/>
+          <circle cx="138" cy="52" r="18" fill="#f3f6fb"/>
+          <circle cx="62" cy="52" r="8" fill="#1f2937"/>
+          <circle cx="138" cy="52" r="8" fill="#1f2937"/>
+          <ellipse cx="82" cy="88" rx="16" ry="14" fill="#fff"/>
+          <ellipse cx="118" cy="88" rx="16" ry="14" fill="#fff"/>
+          <circle cx="86" cy="90" r="6" fill="#111"/>
+          <circle cx="122" cy="90" r="6" fill="#111"/>
+          <rect x="68" y="78" width="64" height="8" rx="4" fill="#111" opacity=".75"/>
+          <ellipse cx="100" cy="108" rx="8" ry="6" fill="#f9a8d4"/>
+          <path d="M88 118c8 8 16 8 24 0" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="48" cy="148" r="14" fill="#f3f6fb"/>
+          <circle cx="152" cy="148" r="14" fill="#f3f6fb"/>
+        </svg>
+
+        <div class="progress" aria-hidden="true"><span id="progress-fill"></span></div>
+
+        <div id="quiz-body">
+          <p class="q-text" id="q-text">Загрузка…</p>
+          <div class="options" id="options"></div>
+        </div>
+
+        <div id="result-body" hidden>
+          <p class="q-text">Похожие направления для тебя</p>
+          <div class="matches" id="matches"></div>
+          <a class="btn btn-blue" data-register href="https://ventorme.ai/register?utm_source=hacknext&amp;utm_campaign=team-175">Создать аккаунт и открыть результат</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <section id="path">
+    <div class="wrap">
+      <div class="path-head">
+        <div>
+          <h2 class="sec">Твой путь к зачислению<br><span class="hl">7 шагов</span> с ИИ-наставником</h2>
+          <p class="sub">Не нужно читать весь сайт. Тест ставит тебя на шаг, который нужен сейчас.</p>
+        </div>
+        <div class="arrows">
+          <button type="button" id="prev-step" aria-label="Назад">‹</button>
+          <button type="button" id="next-step" aria-label="Вперёд">›</button>
+        </div>
+      </div>
+      <div class="track" id="track">
+        <article class="step"><div class="num">01</div><h3>Профессия</h3><p>Короткий тест показывает направления, а не абстрактный «найди себя».</p></article>
+        <article class="step"><div class="num">02</div><h3>Вузы</h3><p>Подборка программ, куда твои баллы и профиль реально подходят.</p></article>
+        <article class="step"><div class="num">03</div><h3>План</h3><p>Дедлайны, документы и порядок действий на одном экране.</p></article>
+        <article class="step"><div class="num">04</div><h3>Экзамены</h3><p>ЕНТ, IELTS, SAT — что закрывать в первую очередь.</p></article>
+        <article class="step"><div class="num">05</div><h3>Эссе</h3><p>Черновик и структура, чтобы не начинать с пустой страницы.</p></article>
+        <article class="step"><div class="num">06</div><h3>Грант</h3><p>Калькулятор и шансы по баллам, без обещаний «точно поступишь».</p></article>
+        <article class="step"><div class="num">07</div><h3>Подача</h3><p>Чеклист до отправки: что ещё висит и что уже закрыто.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <h2 class="sec">Что открывается после регистрации</h2>
+      <p class="sub">Не тарифы и не кабинеты для родителей. Инструменты, которые двигают поступление.</p>
+      <div class="features">
+        <article class="feat"><div class="ico">1</div><h3>Профтест</h3><p>Не витрина из 40 блоков. Ответил — увидел направления.</p></article>
+        <article class="feat"><div class="ico">2</div><h3>Подбор вузов</h3><p>Казахстан и зарубеж, с оценкой шансов, а не бесконечным каталогом.</p></article>
+        <article class="feat"><div class="ico">3</div><h3>ЕНТ и грант</h3><p>Считаем ориентир по баллам. Без мелкого шрифта «это реклама вуза».</p></article>
+        <article class="feat"><div class="ico">4</div><h3>Venti</h3><p>ИИ-помощник, которому можно спросить «что делать на этой неделе».</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap faq-grid">
+      <div>
+        <h2 class="sec">Вопросы до регистрации</h2>
+        <p class="sub">То, что люди ищут на главной, вместо того чтобы начать тест.</p>
+        <a class="btn btn-yellow" href="#quiz">Начать тест</a>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <button type="button" aria-expanded="true">Что я получу после регистрации?<span class="plus">−</span></button>
+          <p class="a">Полный результат теста, список подходящих направлений и доступ к плану поступления. На телефоне это тот же путь, что «Начать тест» — не отдельная форма.</p>
+        </div>
+        <div class="faq-item">
+          <button type="button" aria-expanded="false">Это бесплатно?<span class="plus">+</span></button>
+          <p class="a">Старт бесплатный: тест, базовый разбор и вход через Google. Платные пакеты на этой странице специально не показываем — сначала польза, потом тариф.</p>
+        </div>
+        <div class="faq-item">
+          <button type="button" aria-expanded="false">Сколько занимает тест?<span class="plus">+</span></button>
+          <p class="a">8 коротких вопросов, около двух минут. Результат по направлениям видно сразу, детали плана — после аккаунта.</p>
+        </div>
+        <div class="faq-item">
+          <button type="button" aria-expanded="false">Можно ли поступить, если оценки не идеальные?<span class="plus">+</span></button>
+          <p class="a">Да. Платформа ищет программы, где твой профиль проходит, а не только топ с заведомо высоким порогом.</p>
+        </div>
+        <div class="faq-item">
+          <button type="button" aria-expanded="false">Как подбираются университеты?<span class="plus">+</span></button>
+          <p class="a">По ответам теста, предметам и тому, куда ты целишься: грант в Казахстане, SAT/IELTS или оба трека.</p>
+        </div>
+        <div class="faq-item">
+          <button type="button" aria-expanded="false">Безопасны ли мои данные?<span class="plus">+</span></button>
+          <p class="a">Регистрация идёт на ventorme.ai. Можно войти через Google, без отдельного пароля. Мы не просим телефон в тесте.</p>
+        </div>
+        <div class="faq-item">
+          <button type="button" aria-expanded="false">Родители могут видеть прогресс?<span class="plus">+</span></button>
+          <p class="a">Да, в продукте есть кабинет родителя. Этот лендинг собран для школьника: сначала твой тест, доступ для семьи — потом, если нужно.</p>
+        </div>
+        <div class="faq-item">
+          <button type="button" aria-expanded="false">Нужна почта или достаточно Google?<span class="plus">+</span></button>
+          <p class="a">Оба варианта работают. Большинство заходит через Google — это быстрее с телефона.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="band">
+      <div>
+        <h2>8 вопросов. Дальше — план, не простыня сайта.</h2>
+        <p>Регистрация засчитывается команде 175. Вход через Google тоже подходит.</p>
+      </div>
+      <a class="btn btn-lime" style="width:auto;padding-inline:22px" data-register href="https://ventorme.ai/register?utm_source=hacknext&amp;utm_campaign=team-175">Создать аккаунт</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap foot">
+      <span>Ventorme · команда 175 · HACKNEXT</span>
+      <a data-register href="https://ventorme.ai/register?utm_source=hacknext&amp;utm_campaign=team-175">ventorme.ai/register?utm_campaign=team-175</a>
+    </div>
+  </footer>
+
+  <div class="sticky">
+    <div>
+      <strong>Начать тест</strong>
+      <span>2 минуты, с телефона</span>
+    </div>
+    <a class="btn" href="#quiz">Тест</a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
