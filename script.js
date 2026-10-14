@@ -253,7 +253,8 @@
   });
   document.getElementById("download-result").addEventListener("click", function () {
     if (!result) return;
-    var content = "Ventorme — твоя отправная точка\n\n" + result.track + "\n\n" + result.summary + "\n\nНаправления:\n" + result.names.map(function (name) { return "• " + name; }).join("\n") + "\n\nПрограммы:\n" + result.programs.map(function (program) { return program.university + " — " + program.name + "\n" + program.exams + "\n" + program.dates + "\n" + program.admissions; }).join("\n\n") + "\n\nЧто сделать дальше:\n" + result.actions.map(function (action, index) { return (index + 1) + ". " + action; }).join("\n") + "\n\nКороткий ориентир, не профессиональная диагностика. Требования и сроки проверяй на официальных сайтах вузов.\n\nПродолжить: " + REGISTER;
+    var content = "Ventorme — твоя отправная точка\n\n" + result.track + "\n\n" + result.summary + "\n\nНаправления:\n" + result.names.map(function (name) { return "• " + name; }).join("\n") + "\n\nПрограммы:\n" + result.programs.map(function (program) { return window.VENTORME_I18N.translate(program.university) + " — " + window.VENTORME_I18N.translate(program.name) + "\n" + program.exams + "\n" + program.dates + "\n" + program.admissions; }).join("\n\n") + "\n\nЧто сделать дальше:\n" + result.actions.map(function (action, index) { return (index + 1) + ". " + action; }).join("\n") + "\n\nКороткий ориентир, не профессиональная диагностика. Требования и сроки проверяй на официальных сайтах вузов.\n\nПродолжить: " + REGISTER;
+    content = content.split("\n").map(function (line) { return line ? window.VENTORME_I18N.translate(line) : line; }).join("\n");
     var url = URL.createObjectURL(new Blob(["\uFEFF", content], { type: "text/plain;charset=utf-8" }));
     var link = document.createElement("a");
     link.href = url;
@@ -357,7 +358,7 @@
   function closeMenu() {
     links.classList.remove("open");
     menu.setAttribute("aria-expanded", "false");
-    menu.setAttribute("aria-label", "Открыть меню");
+    menu.setAttribute("aria-label", window.VENTORME_I18N.translate("Открыть меню"));
   }
   function showHome() {
     viewingHome = true;
@@ -382,7 +383,7 @@
   menu.addEventListener("click", function () {
     var open = links.classList.toggle("open");
     menu.setAttribute("aria-expanded", String(open));
-    menu.setAttribute("aria-label", open ? "Закрыть меню" : "Открыть меню");
+    menu.setAttribute("aria-label", window.VENTORME_I18N.translate(open ? "Закрыть меню" : "Открыть меню"));
   });
   links.querySelectorAll("a").forEach(function (link) { link.addEventListener("click", closeMenu); });
   document.addEventListener("keydown", function (event) {
