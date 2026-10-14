@@ -122,7 +122,15 @@
       });
       optionsEl.appendChild(button);
     });
-    if (moveFocus) qText.focus({ preventScroll: true });
+    if (moveFocus) {
+      qText.focus({ preventScroll: true });
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && quizBody.animate) {
+        quizBody.animate(
+          [{ opacity: 0.5, transform: "translateY(5px)" }, { opacity: 1, transform: "translateY(0)" }],
+          { duration: 180, easing: "ease-out" }
+        );
+      }
+    }
   }
   function answerKey(index) {
     return questions[index].options[answers[index]].k;
@@ -234,5 +242,60 @@
   document.addEventListener("click", function (event) {
     if (!event.target.closest(".nav")) closeMenu();
   });
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 940) closeMenu();
+  });
+
+  var header = document.getElementById("top");
+  var navLinks = Array.from(links.querySelectorAll("a"));
+  var sections = navLinks.map(function (link) {
+    return document.querySelector(link.getAttribute("href"));
+  });
+  var scrollPending = false;
+  function updateNavigation() {
+    header.classList.toggle("scrolled", window.scrollY > 24);
+    var active = -1;
+    sections.forEach(function (section, index) {
+      if (section && section.getBoundingClientRect().top <= 160) active = index;
+    });
+    navLinks.forEach(function (link, index) {
+      if (index === active) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+    scrollPending = false;
+  }
+  window.addEventListener("scroll", function () {
+    if (!scrollPending) {
+      scrollPending = true;
+      window.requestAnimationFrame(updateNavigation);
+    }
+  }, { passive: true });
+  updateNavigation();
+
+  var motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (!motionPreference.matches && "IntersectionObserver" in window) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll(".how-card, .quiz-grid, .path-card, .faq-grid article, .final-band").forEach(function (element) {
+      if (element.getBoundingClientRect().top >= window.innerHeight) {
+        element.classList.add("reveal-pending");
+        revealObserver.observe(element);
+      }
+    });
+    motionPreference.addEventListener("change", function (event) {
+      if (event.matches) {
+        revealObserver.disconnect();
+        document.querySelectorAll(".reveal-pending").forEach(function (element) {
+          element.classList.add("reveal-visible");
+        });
+      }
+    });
+  }
   render(false);
 })();
