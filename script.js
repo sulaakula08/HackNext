@@ -81,9 +81,19 @@
     tech: ["Анализ данных", "Прикладная математика", "Программная инженерия", "Кибербезопасность"],
     design: ["Дизайн интерфейсов", "Медиакоммуникации", "Архитектура", "Цифровой дизайн"],
     biz: ["Менеджмент", "Международные отношения", "Финансы", "Предпринимательство"],
-    care: ["Клиническая психология", "Общественное здоровье", "Биомедицина", "Педагогика"]
+    care: ["Психология", "Социология", "Педагогика", "Биомедицина"]
   };
 
+  var DRAFT_KEY = "ventorme.quiz.v2";
+  var SAVED_KEY = "ventorme.saved-plan.v2";
+  var started = false;
+  window.dataLayer = window.dataLayer || [];
+  function track(name, location) {
+    var event = { event: name, funnel: "admission_quiz", version: "v2" };
+    if (location) event.location = location;
+    window.dataLayer.push(event);
+    window.dispatchEvent(new CustomEvent("ventorme:analytics", { detail: event }));
+  }
   var answers = [];
   var step = 0;
   var result = null;
@@ -107,6 +117,10 @@
     qText.textContent = questions[step].q;
     optionsEl.replaceChildren();
     back.disabled = step === 0;
+    document.getElementById("save-status").hidden = true;
+    document.querySelector(".hero").classList.remove("is-complete");
+    updateCTAs();
+    persistDraft();
     setProgress(step);
     questions[step].options.forEach(function (opt, index) {
       var button = document.createElement("button");
@@ -115,9 +129,10 @@
       button.textContent = opt.t;
       button.setAttribute("aria-pressed", String(answers[step] === index));
       button.addEventListener("click", function () {
+        if (!started) { started = true; track("test_started"); }
         answers[step] = index;
         step += 1;
-        if (step === questions.length) showResult();
+        if (step === questions.length) { track("test_completed"); showResult(); }
         else render(true);
       });
       optionsEl.appendChild(button);
@@ -143,7 +158,10 @@
     });
     var max = Math.max.apply(null, Object.values(scores));
     var leaders = Object.keys(scores).filter(function (key) { return scores[key] === max; });
-    var names = leaders.length === 1 ? labels[leaders[0]].slice(0, 3) : leaders.flatMap(function (key) { return labels[key].slice(0, 2); });
+    var names = [];
+    for (var rank = 0; names.length < 3; rank += 1) {
+      leaders.forEach(function (key) { if (names.length < 3) names.push(labels[key][rank]); });
+    }
     var focus = answerKey(4);
     var desired = answerKey(6);
     var destination = answerKey(3);
@@ -171,6 +189,7 @@
     var tracks = { kz: "Казахстан", abroad: "Обучение за рубежом", mix: "Казахстан и зарубежные программы" };
     return {
       names: names,
+      programs: pickPrograms(leaders, destination),
       summary: leaders.length > 1 ? "Твои интересы пересекаются в нескольких областях. Изучи эти направления и сравни, какие задачи тебе ближе." : "По ответам об интересах и предметах начни знакомство с этими направлениями. Это варианты для изучения, а не окончательный выбор профессии.",
       track: tracks[destination],
       actions: actions
@@ -198,7 +217,12 @@
       item.textContent = action;
       list.appendChild(item);
     });
-    document.getElementById("result-title").textContent = "Твой старт: " + result.track;
+    document.getElementById("result-title").textContent = "Твои 3 направления";
+    document.getElementById("result-summary").textContent = result.track + (result.summary.indexOf("пересекаются") >= 0 ? " · Интересы пересекаются в нескольких областях." : " · Начни изучение с этих направлений.");
+    renderPrograms(result.programs);
+    document.querySelector(".hero").classList.add("is-complete");
+    updateCTAs();
+    persistDraft();
     document.getElementById("result-title").focus({ preventScroll: true });
   }
   back.addEventListener("click", function () {
@@ -208,11 +232,12 @@
     answers = [];
     step = 0;
     result = null;
+    started = false;
     render(true);
   });
   document.getElementById("download-result").addEventListener("click", function () {
     if (!result) return;
-    var content = "Ventorme — твоя отправная точка\n\n" + result.track + "\n\n" + result.summary + "\n\nНаправления:\n" + result.names.map(function (name) { return "• " + name; }).join("\n") + "\n\nЧто сделать дальше:\n" + result.actions.map(function (action, index) { return (index + 1) + ". " + action; }).join("\n") + "\n\nКороткий ориентир, не профессиональная диагностика. Требования и сроки проверяй на официальных сайтах вузов.\n\nПродолжить: " + REGISTER;
+    var content = "Ventorme — твоя отправная точка\n\n" + result.track + "\n\n" + result.summary + "\n\nНаправления:\n" + result.names.map(function (name) { return "• " + name; }).join("\n") + "\n\nПрограммы:\n" + result.programs.map(function (program) { return program.university + " — " + program.name + "\n" + program.exams + "\n" + program.dates + "\n" + program.admissions; }).join("\n\n") + "\n\nЧто сделать дальше:\n" + result.actions.map(function (action, index) { return (index + 1) + ". " + action; }).join("\n") + "\n\nКороткий ориентир, не профессиональная диагностика. Требования и сроки проверяй на официальных сайтах вузов.\n\nПродолжить: " + REGISTER;
     var url = URL.createObjectURL(new Blob(["\uFEFF", content], { type: "text/plain;charset=utf-8" }));
     var link = document.createElement("a");
     link.href = url;
@@ -222,7 +247,86 @@
     link.remove();
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   });
-  document.querySelectorAll("[data-register]").forEach(function (link) { link.href = REGISTER; });
+  function persistDraft() {
+    try { sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ answers: answers, step: step, started: started })); } catch (_) {}
+  }
+  function updateCTAs() {
+    var complete = step === questions.length;
+    document.querySelectorAll("[data-flow-cta]").forEach(function (link) {
+      link.href = complete ? REGISTER : "#quiz";
+      var label = link.querySelector("[data-cta-label]");
+      label.textContent = complete ? "Сохранить мой план" : link.dataset.location === "nav" ? "Пройти тест" : "Узнать мои 3 направления";
+    });
+  }
+  function savePlan() {
+    try {
+      localStorage.setItem(SAVED_KEY, JSON.stringify({ answers: answers, step: step, result: result, savedAt: new Date().toISOString() }));
+      return true;
+    } catch (_) {
+      var status = document.getElementById("save-status");
+      status.hidden = false;
+      status.textContent = "Браузер не разрешил сохранение. Скачай план файлом перед переходом.";
+      document.getElementById("result-title").scrollIntoView({ block: "start" });
+      return false;
+    }
+  }
+  document.querySelectorAll("[data-flow-cta]").forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      if (step === questions.length) {
+        if (!savePlan()) { event.preventDefault(); return; }
+        track("signup_click", link.dataset.location);
+      } else {
+        track("test_cta_click", link.dataset.location);
+        if (link.dataset.location === "result") event.preventDefault();
+        qText.focus({ preventScroll: true });
+      }
+    });
+  });
+  document.querySelectorAll("[data-direct-register]").forEach(function (link) {
+    link.addEventListener("click", function () { track("signup_click", "direct"); });
+  });
+  function pickPrograms(leaders, destination) {
+    var programs = [];
+    leaders.forEach(function (key) {
+      var catalogue = window.VENTORME_PROGRAMS[key];
+      var choices = destination === "mix" ? [catalogue.kz[0], catalogue.abroad[0]] : catalogue[destination];
+      programs.push.apply(programs, choices);
+    });
+    if (leaders.length > 1) {
+      programs = leaders.map(function (key) { return window.VENTORME_PROGRAMS[key][destination === "abroad" ? "abroad" : "kz"][0]; });
+      if (destination === "mix") programs[1] = window.VENTORME_PROGRAMS[leaders[1]].abroad[0];
+    }
+    return programs.slice(0, 3);
+  }
+  function renderPrograms(programs) {
+    var container = document.getElementById("program-examples");
+    container.replaceChildren();
+    programs.forEach(function (program) {
+      var card = document.createElement("article");
+      card.className = "program-card";
+      var university = document.createElement("p");
+      university.className = "program-university";
+      university.textContent = program.university;
+      var title = document.createElement("a");
+      title.textContent = program.name;
+      title.href = program.url;
+      title.target = "_blank";
+      title.rel = "noopener noreferrer";
+      var exams = document.createElement("p");
+      exams.textContent = program.exams;
+      var dates = document.createElement("p");
+      dates.className = "program-dates";
+      dates.textContent = program.dates;
+      var source = document.createElement("a");
+      source.className = "program-source";
+      source.href = program.admissions;
+      source.target = "_blank";
+      source.rel = "noopener noreferrer";
+      source.textContent = "Условия приёма · проверено " + program.checked;
+      card.append(university, title, exams, dates, source);
+      container.appendChild(card);
+    });
+  }
   var menu = document.getElementById("menu-btn");
   var links = document.getElementById("links");
   function closeMenu() {
@@ -282,7 +386,7 @@
         }
       });
     }, { threshold: 0.08 });
-    document.querySelectorAll(".how-card, .quiz-grid, .path-card, .faq-grid article, .final-band").forEach(function (element) {
+    document.querySelectorAll(".process-list li, .faq-grid article, .final-band").forEach(function (element) {
       if (element.getBoundingClientRect().top >= window.innerHeight) {
         element.classList.add("reveal-pending");
         revealObserver.observe(element);
@@ -297,5 +401,14 @@
       }
     });
   }
-  render(false);
+  try {
+    var draft = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || localStorage.getItem(SAVED_KEY) || "null");
+    if (draft && Array.isArray(draft.answers) && Number.isInteger(draft.step) && draft.step >= 0 && draft.step <= questions.length && draft.answers.length <= questions.length && draft.answers.every(function (answer, index) { return Number.isInteger(answer) && answer >= 0 && answer < questions[index].options.length; }) && draft.answers.length >= draft.step) {
+      answers = draft.answers;
+      step = draft.step;
+      started = draft.started === true || step > 0;
+    }
+  } catch (_) {}
+  if (step === questions.length) showResult();
+  else render(false);
 })();
