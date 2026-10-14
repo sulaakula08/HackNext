@@ -20,22 +20,22 @@
 <a class="skip" href="#quiz">Перейти к тесту</a>
 <header id="top"><nav class="wrap nav" aria-label="Главная навигация">
 <a class="logo" href="#top"><img src="assets/logo.svg" width="126" height="25" alt="ventorme.ai"></a>
-<div class="links" id="links"><a href="#quiz">Тест</a><a href="#preview">Как это работает</a><a href="#faq">Вопросы</a></div>
+<div class="links" id="links"><a href="#quiz">Тест</a><a href="#preview">Как это работает</a><a href="#faq">Вопросы</a><a class="menu-account" href="https://ventorme.ai/login">Войти</a><a class="menu-account" data-direct-register href="https://ventorme.ai/register?utm_source=hacknext&amp;utm_campaign=team-175">Регистрация</a></div><a class="nav-login" href="https://ventorme.ai/login">Войти</a>
 <a class="nav-account" data-flow-cta data-location="nav" href="#quiz"><span data-cta-label>Пройти тест</span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
 <button class="menu-btn" id="menu-btn" type="button" aria-label="Открыть меню" aria-controls="links" aria-expanded="false"><svg class="menu-icon" viewBox="0 0 24 24" aria-hidden="true"><path class="menu-line menu-line-top" d="M5 8h14"/><path class="menu-line menu-line-bottom" d="M5 16h14"/></svg></button>
 </nav></header>
 <main><section class="hero"><div class="wrap hero-grid">
 <div class="hero-copy"><p class="eyebrow"><span class="dot"></span> ДЛЯ ШКОЛЬНИКОВ И ВЫПУСКНИКОВ</p>
 <h1>Твои <span>3 направления.</span><br> Вузы и первые шаги<br> к поступлению.</h1>
-<p class="lead">Ответь на вопросы об интересах. Увидишь направления, примеры реальных программ и что подготовить для подачи.</p>
-<a class="btn" data-flow-cta data-location="hero" href="#quiz"><span data-cta-label>Узнать мои 3 направления</span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
+<p class="lead">Ответь об интересах — получи направления, примеры программ и список действий.</p>
+
 <p class="micro">Результат сразу · без регистрации</p>
-<div class="hero-guide"><img src="assets/hero-venti-quiz.webp" width="96" height="105" alt="" loading="lazy"><p>Начни с вопроса справа.<br> На телефоне — чуть ниже.</p></div>
+
 </div><div class="quiz-card" id="quiz" aria-label="Тест по интересам">
 <div class="quiz-top">
-<span id="question-count">Вопрос 1 из 8</span>
-<button class="text-button" id="resume-quiz" type="button" hidden>Мой результат</button>
-<span class="badge">8 вопросов · ~2 минуты</span>
+<span id="question-count">Вопрос 1 из 8 · 2 мин</span>
+
+
 </div>
 <div class="progress" role="progressbar" aria-label="Прогресс теста" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0" id="quiz-progress">
 <span id="progress-fill">
@@ -63,8 +63,8 @@
 </ol>
 </div>
 
-<a class="btn result-save" data-flow-cta data-location="result" href="#quiz"><span data-cta-label>Сохранить мой план</span><svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg></a>
-<p class="registration-note">Сохраним копию плана в этом браузере и откроем регистрацию Ventorme.</p>
+<a class="btn result-save" data-flow-cta data-location="result" href="#quiz"><span data-cta-label>Создать аккаунт и продолжить</span><svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg></a>
+<p class="registration-note">Откроется бесплатная регистрация Ventorme. Копия результата останется доступна здесь.</p>
 <div class="result-tools">
 <button class="text-button" id="home-page" type="button">На главную</button>
 <button class="text-button" id="download-result" type="button">Скачать результат <svg class="icon " aria-hidden="true" focusable="false"><use href="#icon-download"></use></svg></button>
@@ -76,6 +76,7 @@
 <noscript>
 <p>Для теста включи JavaScript. Шаги подготовки ниже доступны без него.</p>
 </noscript></div>
+<aside class="sample-preview" aria-label="Пример результата"><div class="sample-preview-heading"><span class="badge">Пример</span><span>Вот что ты получишь</span></div><div class="sample-chips"><span>Программная инженерия</span><span>Анализ данных</span><span>Кибербезопасность</span></div><div class="sample-program" id="sample-program"></div><button class="text-button" id="resume-quiz" type="button" hidden>Мой результат</button></aside>
 </div></section>
 <section class="preview-section" id="preview"><div class="wrap process-panel">
 <div class="path-heading"><p class="eyebrow">КАК ЭТО РАБОТАЕТ</p><h2>От интересов —<br> к подаче документов.</h2><p>Начни с теста. Дальше — программы, требования и подготовка в Ventorme.</p></div>
@@ -85,13 +86,13 @@
 <li><span class="path-number">04</span><div><h3>Экзамены</h3><p>Проверь свой уровень и составь график подготовки.</p></div></li>
 <li><span class="path-number">05</span><div><h3>Эссе</h3><p>Опиши свой опыт и объясни, почему выбираешь программу.</p></div></li>
 <li><span class="path-number">06</span><div><h3>Финансирование</h3><p>Проверь условия грантов и стипендий.</p></div></li>
-<li><span class="path-number">07</span><div><h3>Подача</h3><p>Собери документы и отправь заявление до дедлайна.</p></div></li></ol>
+<li><span class="path-number">07</span><div><h3>Подача</h3><p>Собери документы и отправь заявление до дедлайна.</p></div></li></ol><a class="btn process-cta" data-flow-cta data-location="steps" href="#quiz"><span data-cta-label>Начать тест</span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a>
 </div></section>
 <section class="faq-section" id="faq"><div class="wrap"><p class="eyebrow">ПЕРЕД СТАРТОМ</p><h2>Что важно знать</h2><div class="faq-grid">
-<article><h3>Что здесь бесплатно?</h3><p>Тест, 3 направления, примеры программ и первые шаги доступны без аккаунта. Условия инструментов Ventorme смотри на платформе.</p></article>
-<article><h3>Откуда информация о вузах?</h3><p>Из официальных каталогов и страниц приёма. В результате у каждой программы есть ссылка на источник и дата проверки.</p></article>
-<article><h3>Мои ответы сохранятся?</h3><p>В этой вкладке можно продолжить после перезагрузки. Кнопка «Сохранить мой план» оставит копию в этом браузере. Также можно скачать текстовый файл.</p></article>
-<article><h3>Это точный выбор профессии?</h3><p>Это ориентир по интересам. Изучи учебные планы и попробуй практические задачи, прежде чем выбирать специальность.</p></article>
+<article><h3>Что здесь бесплатно?</h3><p>Тест и результат без аккаунта; условия остальных инструментов — на Ventorme.</p></article>
+<article><h3>Откуда информация о вузах?</h3><p>Из официальных сайтов вузов: у каждой программы есть источник и дата проверки.</p></article>
+<article><h3>Мои ответы сохранятся?</h3><p>Результат можно скачать файлом, чтобы вернуться к нему позже.</p></article>
+<article><h3>Это точный выбор профессии?</h3><p>Это ориентир по интересам; проверь выбор учебными планами и практикой.</p></article>
 </div></div></section>
-<section class="final-section"><div class="wrap final-band"><div><p class="eyebrow">ТВОЙ РЕЗУЛЬТАТ</p><h2>3 направления.<br> Программы. Первые шаги.</h2><p>Получишь на этой странице, затем решишь о регистрации.</p></div><div class="final-actions"><a class="btn btn-lime" data-flow-cta data-location="final" href="#quiz"><span data-cta-label>Узнать мои 3 направления</span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a></div></div></section>
+<section class="final-section"><div class="wrap final-band"><div><p class="eyebrow">ТВОЙ РЕЗУЛЬТАТ</p><h2>Результат сразу<br> на странице.</h2><p>Регистрация — по желанию.</p></div><div class="final-actions"><a class="btn btn-lime" data-flow-cta data-location="final" href="#quiz"><span data-cta-label>Узнать мои 3 направления</span><svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg></a></div></div></section>
 </main><footer><div class="wrap foot"><a class="logo" href="#top">ventorme<span>.ai</span></a><span>HACKNEXT · команда 175</span><a href="https://ventorme.ai/register?utm_source=hacknext&amp;utm_campaign=team-175" data-direct-register>Уже знаешь цель? Открыть Ventorme</a></div></footer><script src="programs.js"></script><script src="script.js"></script></body></html>

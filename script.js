@@ -115,10 +115,11 @@
     var visibleStep = viewingHome ? 0 : step;
     quizBody.hidden = false;
     resultBody.hidden = true;
-    count.textContent = "Вопрос " + (visibleStep + 1) + " из " + questions.length;
+    count.textContent = "Вопрос " + (visibleStep + 1) + " из " + questions.length + " · 2 мин";
     qText.textContent = questions[visibleStep].q;
     optionsEl.replaceChildren();
     back.disabled = viewingHome || step === 0;
+    back.hidden = viewingHome || step === 0;
     var resume = document.getElementById("resume-quiz");
     resume.hidden = !viewingHome || step === 0;
     resume.textContent = step === questions.length ? "Мой результат" : "Продолжить тест";
@@ -270,7 +271,7 @@
     document.querySelectorAll("[data-flow-cta]").forEach(function (link) {
       link.href = complete ? REGISTER : "#quiz";
       var label = link.querySelector("[data-cta-label]");
-      label.textContent = complete ? "Сохранить мой план" : link.dataset.location === "nav" ? "Пройти тест" : "Узнать мои 3 направления";
+      label.textContent = complete ? (link.dataset.location === "nav" ? "Создать аккаунт" : "Создать аккаунт и продолжить") : link.dataset.location === "nav" ? "Пройти тест" : link.dataset.location === "steps" ? "Начать тест" : "Узнать мои 3 направления";
     });
   }
   function savePlan() {
@@ -280,7 +281,7 @@
     } catch (_) {
       var status = document.getElementById("save-status");
       status.hidden = false;
-      status.textContent = "Браузер не разрешил сохранение. Скачай план файлом перед переходом.";
+      status.textContent = "Для копии результата на этом устройстве скачай план файлом.";
       document.getElementById("result-title").scrollIntoView({ block: "start" });
       return false;
     }
@@ -288,7 +289,7 @@
   document.querySelectorAll("[data-flow-cta]").forEach(function (link) {
     link.addEventListener("click", function (event) {
       if (step === questions.length && !viewingHome) {
-        if (!savePlan()) { event.preventDefault(); return; }
+        savePlan();
         track("signup_click", link.dataset.location);
       } else {
         track("test_cta_click", link.dataset.location);
@@ -342,6 +343,15 @@
       container.appendChild(card);
     });
   }
+  var sample = window.VENTORME_PROGRAMS.tech.kz[0];
+  var sampleName = document.createElement("a");
+  sampleName.href = sample.url;
+  sampleName.target = "_blank";
+  sampleName.rel = "noopener noreferrer";
+  sampleName.textContent = sample.name + " · Astana IT University";
+  var sampleSource = document.createElement("p");
+  sampleSource.textContent = "Официальный сайт вуза · проверено " + sample.checked;
+  document.getElementById("sample-program").append(sampleName, sampleSource);
   var menu = document.getElementById("menu-btn");
   var links = document.getElementById("links");
   function closeMenu() {
@@ -386,7 +396,7 @@
   });
 
   var header = document.getElementById("top");
-  var navLinks = Array.from(links.querySelectorAll("a"));
+  var navLinks = Array.from(links.querySelectorAll('a[href^="#"]'));
   var sections = navLinks.map(function (link) {
     return document.querySelector(link.getAttribute("href"));
   });
