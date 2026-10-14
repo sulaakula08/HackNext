@@ -11,6 +11,9 @@
 Превью редактора эссе с официального сайта Ventorme|Ventorme ресми сайтындағы эссе редакторының превьюі|Essay editor preview from the official Ventorme website
 Твои интересы пересекаются в нескольких областях. Изучи эти направления и сравни, какие задачи тебе ближе.|Қызығушылықтарың бірнеше салада тоғысады. Осы бағыттарды зерттеп, қандай тапсырмалар жақын екенін салыстыр.|Your interests span several fields. Explore these directions and compare which tasks you enjoy.
 По ответам об интересах и предметах начни знакомство с этими направлениями. Это варианты для изучения, а не окончательный выбор профессии.|Қызығушылықтарың мен пәндер туралы жауаптарға сай осы бағыттардан баста. Бұл мамандықты түпкілікті таңдау емес, зерттеуге арналған нұсқалар.|Based on your interests and subjects, start exploring these directions. These are options to explore, not a final career decision.
+Превью:|Превью:|Previews:
+· Данные вузов проверены 14.10.2026|· Университет деректері 14.10.2026 тексерілді|· University data checked 14 Oct 2026
+Источники и доступ|Дереккөздер мен қолжетімділік|Sources and access
 Тест|Тест|Quiz
 Как это работает|Қалай жұмыс істейді|How it works
 Вопросы|Сұрақтар|Questions
