@@ -87,6 +87,7 @@
   var DRAFT_KEY = "ventorme.quiz.v2";
   var SAVED_KEY = "ventorme.saved-plan.v2";
   var started = false;
+  var viewingHome = false;
   window.dataLayer = window.dataLayer || [];
   function track(name, location) {
     var event = { event: name, funnel: "admission_quiz", version: "v2" };
@@ -111,24 +112,35 @@
     progressEl.setAttribute("aria-valuenow", String(value));
   }
   function render(moveFocus) {
+    var visibleStep = viewingHome ? 0 : step;
     quizBody.hidden = false;
     resultBody.hidden = true;
-    count.textContent = "Вопрос " + (step + 1) + " из " + questions.length;
-    qText.textContent = questions[step].q;
+    count.textContent = "Вопрос " + (visibleStep + 1) + " из " + questions.length;
+    qText.textContent = questions[visibleStep].q;
     optionsEl.replaceChildren();
-    back.disabled = step === 0;
+    back.disabled = viewingHome || step === 0;
+    var resume = document.getElementById("resume-quiz");
+    resume.hidden = !viewingHome || step === 0;
+    resume.textContent = step === questions.length ? "Мой результат" : "Продолжить тест";
     document.getElementById("save-status").hidden = true;
     document.querySelector(".hero").classList.remove("is-complete");
     updateCTAs();
     persistDraft();
-    setProgress(step);
-    questions[step].options.forEach(function (opt, index) {
+    setProgress(visibleStep);
+    questions[visibleStep].options.forEach(function (opt, index) {
       var button = document.createElement("button");
       button.type = "button";
       button.className = "opt";
       button.textContent = opt.t;
-      button.setAttribute("aria-pressed", String(answers[step] === index));
+      button.setAttribute("aria-pressed", String(!viewingHome && answers[step] === index));
       button.addEventListener("click", function () {
+        if (viewingHome) {
+          viewingHome = false;
+          answers = [];
+          step = 0;
+          result = null;
+          started = false;
+        }
         if (!started) { started = true; track("test_started"); }
         answers[step] = index;
         step += 1;
@@ -196,6 +208,8 @@
     };
   }
   function showResult() {
+    viewingHome = false;
+    document.getElementById("resume-quiz").hidden = true;
     result = makeResult();
     quizBody.hidden = true;
     resultBody.hidden = false;
@@ -229,6 +243,7 @@
     if (step > 0) { step -= 1; render(true); }
   });
   document.getElementById("restart-quiz").addEventListener("click", function () {
+    viewingHome = false;
     answers = [];
     step = 0;
     result = null;
@@ -248,10 +263,10 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   });
   function persistDraft() {
-    try { sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ answers: answers, step: step, started: started })); } catch (_) {}
+    try { sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ answers: answers, step: step, started: started, viewingHome: viewingHome })); } catch (_) {}
   }
   function updateCTAs() {
-    var complete = step === questions.length;
+    var complete = step === questions.length && !viewingHome;
     document.querySelectorAll("[data-flow-cta]").forEach(function (link) {
       link.href = complete ? REGISTER : "#quiz";
       var label = link.querySelector("[data-cta-label]");
@@ -272,7 +287,7 @@
   }
   document.querySelectorAll("[data-flow-cta]").forEach(function (link) {
     link.addEventListener("click", function (event) {
-      if (step === questions.length) {
+      if (step === questions.length && !viewingHome) {
         if (!savePlan()) { event.preventDefault(); return; }
         track("signup_click", link.dataset.location);
       } else {
@@ -334,6 +349,26 @@
     menu.setAttribute("aria-expanded", "false");
     menu.setAttribute("aria-label", "Открыть меню");
   }
+  function showHome() {
+    viewingHome = true;
+    closeMenu();
+    render(false);
+    window.scrollTo({ top: 0, behavior: "instant" });
+    var logo = document.querySelector(".nav .logo");
+    logo.focus({ preventScroll: true });
+  }
+  document.getElementById("home-page").addEventListener("click", showHome);
+  document.querySelectorAll('.logo[href="#top"]').forEach(function (logo) {
+    logo.addEventListener("click", function (event) {
+      event.preventDefault();
+      showHome();
+    });
+  });
+  document.getElementById("resume-quiz").addEventListener("click", function () {
+    viewingHome = false;
+    if (step === questions.length) showResult();
+    else render(true);
+  });
   menu.addEventListener("click", function () {
     var open = links.classList.toggle("open");
     menu.setAttribute("aria-expanded", String(open));
@@ -407,8 +442,9 @@
       answers = draft.answers;
       step = draft.step;
       started = draft.started === true || step > 0;
+      viewingHome = draft.viewingHome === true;
     }
   } catch (_) {}
-  if (step === questions.length) showResult();
+  if (step === questions.length && !viewingHome) showResult();
   else render(false);
 })();
