@@ -1448,3 +1448,13 @@ header.scrolled .nav { border-color: #d4dceb; box-shadow: 0 7px 22px rgba(37,42,
 header.scrolled .nav { border-color: #cfd8e6; background: rgba(255,255,255,.94); box-shadow: 0 7px 24px rgba(29,39,69,.16), 0 1px 3px rgba(29,39,69,.05); }
 @media(max-width:520px) { .product-calendar { padding: 16px; gap: 12px; flex-wrap: wrap; } .product-calendar>div { flex: 1; min-width: 0; } .product-calendar>.product-tag { margin: 0 0 0 58px; } .product-calendar h3 { font-size: 16px; } .product-calendar p { font-size: 12px; } .calendar-icon { width: 40px; height: 40px; } .product-footnote { flex-direction: column; gap: 10px; } }
 @media(max-width:520px) { .product-calendar { display: grid; grid-template-columns: 40px minmax(0,1fr); gap: 10px 12px; } .calendar-icon { grid-column: 1; grid-row: 1 / 3; } .product-calendar>div { grid-column: 2; } .product-calendar>.product-tag { grid-column: 2; justify-self: start; margin: 0; } }
+/* A persistent sign-up action, separate from the quiz state. */
+.nav-register { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 10px 16px; border-radius: 12px; background: #e2ff00; border: 1px solid #d5ed00; color: #252825; text-decoration: none; font-size: 13px; font-weight: 500; white-space: nowrap; flex: none; box-shadow: 0 3px 8px rgba(146,166,0,.1); transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+.nav-register .icon { width: 15px; height: 15px; }
+.nav-register:hover { background: #d5f100; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(146,166,0,.17); }
+.nav-register:active { transform: translateY(0); }
+@media(max-width:1100px) { .nav-account { display: none; } }
+@media(max-width:940px) { .nav-register { margin-left: auto; } .language-switcher { margin-left: 0; } }
+@media(max-width:520px) { .nav { gap: 6px; } .nav .logo img { width: 100px; } .nav-register { min-height: 36px; padding: 8px 10px; font-size: 11px; gap: 5px; } .nav-register .icon { display: none; } .language-toggle { padding: 7px 8px; } }
+@media(max-width:380px) { .language-toggle>.icon { display: none; } .language-toggle { padding: 7px; min-width: 30px; } .nav-register { padding: 8px; } }
+@media(prefers-reduced-motion:reduce) { .nav-register { transition: none; } .nav-register:hover { transform: none; } }
